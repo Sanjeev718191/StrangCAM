@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "942071846993",
+    "firebase_url": "https://random-calls-fcca9-default-rtdb.firebaseio.com",
+    "project_id": "random-calls-fcca9",
+    "storage_bucket": "random-calls-fcca9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942071846993:android:58efde1f86765bcac54070",
+        "android_client_info": {
+          "package_name": "com.sk.strangcam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942071846993-62t30pctsdg6oo685kb75k7uhgi154km.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sk.strangcam",
+            "certificate_hash": "760c1c397af5f5bcb0beb22838a4db78c835c0b7"
+          }
+        },
+        {
+          "client_id": "942071846993-j7c4sn230899ho7gj08qksf08n8t9nkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASSabnN3Ht8g5C6TGTuP7ki-Y8TBZKdX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942071846993-ajhihj5o4r793frgtv6h6kf23pgen26v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

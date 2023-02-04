@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomeActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_image" />
+
+    <RelativeLayout
+        android:id="@+id/welcomeContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/welcomeAppTitle"
+            android:layout_width="300dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/app_title"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/welcomeHeadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meet Strangers"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/welcomeAppTitle"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="28sp"/>
+        <TextView
+            android:id="@+id/welcomeSubHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat via text and video calls \n with random people All around Globe"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:layout_below="@+id/welcomeHeadline"
+            android:layout_centerHorizontal="true"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/welcomeStartBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Get Start"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="60dp"
+            android:background="@drawable/button_background"
+            />
+
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
