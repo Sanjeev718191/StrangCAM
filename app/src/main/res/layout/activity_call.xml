@@ -5,6 +5,96 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CallActivity"
-    android:background="@color/primary_blue">
+    android:background="@color/black">
+
+    <WebView
+        android:id="@+id/videoCallWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/connectingAnimationView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:background="@drawable/button_white_background"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp">
+            
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/remoteUserImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/unknown_user"/>
+
+            <TextView
+                android:id="@+id/remoteUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UserName"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginRight="16dp"
+                android:textStyle="bold"/>
+            
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/endCall"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:visibility="invisible"
+            android:src="@drawable/btn_endcall_normal"/>
+
+        <ImageView
+            android:id="@+id/muteMic"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/endCall"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="32dp"
+            android:visibility="invisible"
+            android:src="@drawable/btn_unmute_normal"/>
+
+        <ImageView
+            android:id="@+id/offCamera"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/endCall"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="32dp"
+            android:visibility="invisible"
+            android:src="@drawable/btn_video_normal"/>
+
+    </RelativeLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
