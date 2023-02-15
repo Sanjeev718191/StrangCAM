@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CallActivity"
+    tools:context=".Activities.CallActivity"
     android:background="@color/black">
 
     <WebView
         android:id="@+id/videoCallWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"/>
+        android:layout_height="match_parent"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/connectingAnimationView"
@@ -42,8 +41,8 @@
             
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/remoteUserImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_margin="8dp"
                 android:src="@drawable/unknown_user"/>
 
@@ -53,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="UserName"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:layout_marginRight="16dp"
                 android:textStyle="bold"/>
             
@@ -61,8 +60,8 @@
 
         <ImageView
             android:id="@+id/endCall"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
@@ -71,30 +70,28 @@
 
         <ImageView
             android:id="@+id/muteMic"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/endCall"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginRight="20dp"
             android:visibility="invisible"
             android:src="@drawable/btn_unmute_normal"/>
 
         <ImageView
             android:id="@+id/offCamera"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/endCall"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
-            android:layout_marginLeft="32dp"
+            android:layout_marginLeft="20dp"
             android:visibility="invisible"
             android:src="@drawable/btn_video_normal"/>
 
     </RelativeLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

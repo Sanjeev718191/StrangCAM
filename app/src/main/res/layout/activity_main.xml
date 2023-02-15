@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.MainActivity">
 
     <ImageView
         android:id="@+id/MainBackgroundImage"
@@ -53,7 +53,7 @@
                 android:id="@+id/totalCoins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You Have : 100"
+                android:text="You Have : 0"
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/white" />
 
@@ -107,7 +107,7 @@
             android:id="@+id/onlinUserTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="50"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="34sp"
             android:textStyle="bold"

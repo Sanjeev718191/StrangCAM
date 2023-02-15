@@ -1,4 +1,4 @@
-package com.sk.strangcam;
+package com.sk.strangcam.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,6 +24,7 @@ public class ConnectingActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
     boolean isOkay = false;
+    String decision;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class ConnectingActivity extends AppCompatActivity {
         animationDrawable.start();
 
         String imageUrl = getIntent().getStringExtra("profile");
-        String decision = getIntent().getStringExtra("request");
+        decision = getIntent().getStringExtra("request");
         Glide.with(this).load(imageUrl).into(binding.connectingUserImageView);
 
         database = FirebaseDatabase.getInstance();
@@ -63,6 +61,7 @@ public class ConnectingActivity extends AppCompatActivity {
                                 for(DataSnapshot childSnap : snapshot.getChildren()){
                                     database.getReference()
                                             .child("users")
+                                            .child(childSnap.getKey())
                                             .child("incoming")
                                             .setValue(userName);
                                     database.getReference()
@@ -138,10 +137,101 @@ public class ConnectingActivity extends AppCompatActivity {
                     });
 
         } else {
-            //code for live chat
-//            startActivity(new Intent(ConnectingActivity.this, ChatActivity.class));
-//            finish();
+            database.getReference().child("chatRooms")
+                    .orderByChild("status")
+                    .equalTo(0).limitToFirst(1)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.getChildrenCount() > 0){
+                                if(isOkay) return;
+                                isOkay = true;
+                                for(DataSnapshot childSnap : snapshot.getChildren()){
+                                    database.getReference()
+                                            .child("chatRooms")
+                                            .child(childSnap.getKey())
+                                            .child("incoming")
+                                            .setValue(userName);
+                                    database.getReference()
+                                            .child("chatRooms")
+                                            .child(childSnap.getKey())
+                                            .child("status")
+                                            .setValue(1);
+                                    Intent intent = new Intent(ConnectingActivity.this, ChatActivity.class);
+                                    String incoming = childSnap.child("incoming").getValue(String.class);
+                                    String createdBy = childSnap.child("createdBy").getValue(String.class);
+                                    boolean isAvailable = childSnap.child("isAvailable").getValue(Boolean.class);
+                                    intent.putExtra("username", userName);
+                                    intent.putExtra("incoming", incoming);
+                                    intent.putExtra("createdBy", createdBy);
+                                    intent.putExtra("isAvailable", isAvailable);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } else {
+                                //create new room
+                                HashMap<String, Object> room = new HashMap<>();
+                                room.put("incoming", userName);
+                                room.put("createdBy", userName);
+                                room.put("isAvailable", true);
+                                room.put("status", 0);
+
+                                database.getReference().child("chatRooms")
+                                        .child(userName)
+                                        .setValue(room).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                database.getReference().child("chatRooms")
+                                                        .child(userName).addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                if(snapshot.child("status").exists()){
+                                                                    if(snapshot.child("status").getValue(Integer.class) == 1){
+                                                                        if(isOkay) return;
+                                                                        isOkay = true;
+                                                                        Intent intent = new Intent(ConnectingActivity.this, ChatActivity.class);
+                                                                        String incoming = snapshot.child("incoming").getValue(String.class);
+                                                                        String createdBy = snapshot.child("createdBy").getValue(String.class);
+                                                                        boolean isAvailable = snapshot.child("isAvailable").getValue(Boolean.class);
+                                                                        intent.putExtra("username", userName);
+                                                                        intent.putExtra("incoming", incoming);
+                                                                        intent.putExtra("createdBy", createdBy);
+                                                                        intent.putExtra("isAvailable", isAvailable);
+                                                                        startActivity(intent);
+                                                                        finish();
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                            }
+                                                        });
+                                            }
+                                        });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(decision.equals("call")){
+            if(database.getReference().child("users").child(auth.getUid()) != null)
+                database.getReference().child("users").child(auth.getUid()).setValue(null);
+        } else {
+            if(database.getReference().child("chatRooms").child(auth.getUid()) != null)
+                database.getReference().child("chatRooms").child(auth.getUid()).setValue(null);
+        }
+        finish();
     }
 }

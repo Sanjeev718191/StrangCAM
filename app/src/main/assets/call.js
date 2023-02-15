@@ -81,4 +81,8 @@ function toggleAudio(b) {
     } else {
         localStream.getAudioTracks()[0].enabled = false
     }
-} 
+}
+
+function closeConnection(){
+    peer.destroy();
+}
