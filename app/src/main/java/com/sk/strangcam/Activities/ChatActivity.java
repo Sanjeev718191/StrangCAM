@@ -89,7 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("chatRooms").child(roomId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getChildrenCount()<=0){
+                if(snapshot.getValue() == null){
                     Toast.makeText(ChatActivity.this, "Receiver left the Room...", Toast.LENGTH_SHORT).show();
                     finish();
                 }

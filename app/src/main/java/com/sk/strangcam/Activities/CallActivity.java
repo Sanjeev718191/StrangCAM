@@ -82,6 +82,22 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
+        databaseReference.child(createdBy).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null){
+                    callJavaScriptFunction("javascript:closeConnection()");
+                    finish();
+                    Toast.makeText(CallActivity.this, "Receiver Is Disconnected...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public void setupWebView(){
