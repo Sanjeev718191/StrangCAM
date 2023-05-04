@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
@@ -28,6 +30,7 @@ public class RewardsActivity extends AppCompatActivity {
     FirebaseDatabase database;
     int coins = 0;
     private RewardedAd mRewardedAd;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +38,28 @@ public class RewardsActivity extends AppCompatActivity {
         binding = ActivityRewardsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please Wait");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
         database = FirebaseDatabase.getInstance();
         currentUid = FirebaseAuth.getInstance().getUid();
         loadAd();
 
-        database.getReference().child("profiles")
-                .child(currentUid)
-                .child("coins")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        coins = snapshot.getValue(Integer.class);
-                        binding.coins.setText("You have : "+coins);
-                    }
+        database.getReference().child("profiles").child(currentUid).child("coins").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                coins = snapshot.getValue(Integer.class);
+                binding.coins.setText("You have : "+coins);
+                progressDialog.dismiss();
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+            }
+        });
 
         binding.ad1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +81,7 @@ public class RewardsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Toast.makeText(RewardsActivity.this, "Unable to load Ad", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -99,6 +106,7 @@ public class RewardsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Toast.makeText(RewardsActivity.this, "Unable to load Ad", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -123,6 +131,7 @@ public class RewardsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Toast.makeText(RewardsActivity.this, "Unable to load Ad", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -130,17 +139,20 @@ public class RewardsActivity extends AppCompatActivity {
     }
 
     private void loadAd(){
+        progressDialog.show();
         AdRequest adRequest = new AdRequest.Builder().build();
 
-        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917", adRequest, new RewardedAdLoadCallback() {
+        RewardedAd.load(this, "ca-app-pub-2300470009706916/4816957578", adRequest, new RewardedAdLoadCallback() {
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 mRewardedAd = null;
+                progressDialog.dismiss();
             }
 
             @Override
             public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                 mRewardedAd = rewardedAd;
+                progressDialog.dismiss();
             }
         });
     }

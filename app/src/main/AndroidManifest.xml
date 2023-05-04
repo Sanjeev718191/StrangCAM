@@ -17,10 +17,14 @@
         android:theme="@style/Theme.StrangCAM"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.EditProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activities.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ChatActivity"/>
+            android:theme="@style/Theme.ChatActivity" />
         <activity
             android:name=".Activities.CallActivity"
             android:exported="false"
@@ -41,8 +45,8 @@
         <activity
             android:name=".Activities.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.StrangCAMColored"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.StrangCAMColored" />
         <activity
             android:name=".Activities.WelcomeActivity"
             android:exported="true"
@@ -57,10 +61,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-2300470009706916~3757412377" />
     </application>
 
 </manifest>

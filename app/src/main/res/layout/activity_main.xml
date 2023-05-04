@@ -139,6 +139,7 @@
             android:background="@drawable/gray_background">
 
         <TextView
+            android:id="@+id/payCoins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Coins : 5"

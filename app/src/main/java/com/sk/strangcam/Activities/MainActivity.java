@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private int requestCode = 1;
     User user;
+    int payCoins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         currentUser = auth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please Wait");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
         getOnlineUser();
@@ -61,37 +64,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        database.getReference().child("profiles")
-                .child(currentUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
+        database.getReference().child("profiles").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                coins = user.getCoins();
+                binding.totalCoins.setText("You have : " + coins);
+                if(!user.getProfile().equals("")) {
+                    Glide.with(MainActivity.this)
+                            .load(user.getProfile())
+                            .into(binding.mainUserImageView);
+                }
+
+                database.getReference("payCoins").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        user = snapshot.getValue(User.class);
-                        coins = user.getCoins();
-                        binding.totalCoins.setText("You have : " + coins);
-                        Glide.with(MainActivity.this)
-                                .load(user.getProfile())
-                                .into(binding.mainUserImageView);
-                        progressDialog.dismiss();
+                        long val =  snapshot.getValue(Long.class);
+                        payCoins = (int) val;
+                        binding.payCoins.setText("Coins : "+payCoins);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        progressDialog.dismiss();
-                        Toast.makeText(MainActivity.this, "Please check your network connection...", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "Please check your network connection...", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         binding.mainVideoCallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 askPermissions();
                 if(isPermissionsGranted()){
-                    if(coins >= 5){
-                        coins = coins-5;
-                        database.getReference().child("profiles")
-                                .child(currentUser.getUid())
-                                .child("coins").setValue(coins);
+                    if(coins >= payCoins){
+                        coins = coins-payCoins;
+                        binding.totalCoins.setText("You have : " + coins);
+                        database.getReference().child("profiles").child(currentUser.getUid()).child("coins").setValue(coins);
                         Intent intent = new Intent(MainActivity.this, ConnectingActivity.class);
                         intent.putExtra("profile", user.getProfile());
                         intent.putExtra("request", "call");
@@ -108,11 +125,10 @@ public class MainActivity extends AppCompatActivity {
         binding.mainChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(coins >= 5){
-                    coins = coins-5;
-                    database.getReference().child("profiles")
-                            .child(currentUser.getUid())
-                            .child("coins").setValue(coins);
+                if(coins >= payCoins){
+                    coins = coins-payCoins;
+                    binding.totalCoins.setText("You have : " + coins);
+                    database.getReference().child("profiles").child(currentUser.getUid()).child("coins").setValue(coins);
                     Intent intent = new Intent(MainActivity.this, ConnectingActivity.class);
                     intent.putExtra("profile", user.getProfile());
                     intent.putExtra("request", "chat");
@@ -131,38 +147,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        binding.mainUserImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                intent.putExtra("id", user.getuID());
+                startActivity(intent);
+            }
+        });
 
     }
 
+    int charUser = 0, vidUser = 0;
     private void getOnlineUser() {
-        final int[] vidOnline = {0};
-        database.getReference().child("users")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference().child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vidUser = (int) snapshot.getChildrenCount();
+                database.getReference().child("chatRooms").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        vidOnline[0] = (int) snapshot.getChildrenCount();
+                        charUser = (int) snapshot.getChildrenCount();
+                        binding.onlinUserTextView.setText(String.valueOf(vidUser+charUser));
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) { }
                 });
-        final int[] chatOnline = {0};
-        database.getReference().child("chatRooms")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        chatOnline[0] = (int) snapshot.getChildrenCount();
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
-        binding.onlinUserTextView.setText(String.valueOf(chatOnline[0]+vidOnline[0]));
+            }
+        });
     }
 
 

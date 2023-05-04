@@ -39,7 +39,7 @@ public class ConnectingActivity extends AppCompatActivity {
 
         String imageUrl = getIntent().getStringExtra("profile");
         decision = getIntent().getStringExtra("request");
-        Glide.with(this).load(imageUrl).into(binding.connectingUserImageView);
+        if(!imageUrl.equals("")) Glide.with(this).load(imageUrl).into(binding.connectingUserImageView);
 
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();

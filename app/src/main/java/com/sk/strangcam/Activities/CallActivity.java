@@ -155,8 +155,7 @@ public class CallActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
-
-                            Glide.with(CallActivity.this).load(user.getProfile()).into(binding.remoteUserImage);
+                            if(!user.getProfile().equals("")) Glide.with(CallActivity.this).load(user.getProfile()).into(binding.remoteUserImage);
                             binding.remoteUserName.setText(user.getName());
                         }
 
